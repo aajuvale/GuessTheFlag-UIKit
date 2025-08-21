@@ -15,6 +15,7 @@ class ViewController: UIViewController {
     var countries = [String]()
     var score = 0
     var correctAnswer = 0
+    var questionsAsked = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,23 +43,10 @@ class ViewController: UIViewController {
         button3.layer.borderColor = UIColor.lightGray.cgColor
 
         askQuestion(action: nil)
-
-        // Other way
-//        countries.append("estonia")
-//        countries.append("france")
-//        countries.append("germany")
-//        countries.append("ireland")
-//        countries.append("italy")
-//        countries.append("monaco")
-//        countries.append("nigeria")
-//        countries.append("poland")
-//        countries.append("russia")
-//        countries.append("spain")
-//        countries.append("uk")
-//        countries.append("us")
     }
 
     func askQuestion(action: UIAlertAction!) {
+        questionsAsked += 1
         countries.shuffle()
         correctAnswer = Int.random(in: 0...2)
 
@@ -66,7 +54,14 @@ class ViewController: UIViewController {
         button2.setImage(UIImage(named: countries[1]), for: .normal)
         button3.setImage(UIImage(named: countries[2]), for: .normal)
 
-        title = countries[correctAnswer].uppercased()
+        // Challenge 1: Showing score
+        title =  "Which of these is " + countries[correctAnswer].uppercased() + "? Current Score: \(score)"
+
+        // Challenge 2: Final Alert
+        if questionsAsked >= 10 {
+            let ac = UIAlertController(title: "Thanks for playing!", message: "You have answered 10 Questions!", preferredStyle: .alert)
+            present(ac, animated: true)
+        }
     }
 
     @IBAction func buttonTapped(_ sender: UIButton) {
@@ -80,7 +75,12 @@ class ViewController: UIViewController {
             score -= 1
         }
 
-        let ac = UIAlertController(title: title, message: "Your score is \(score)", preferredStyle: .alert)
+        // Challenge 3: Wrong Flag message w/ ternary
+        let ac = UIAlertController(
+            title: title,
+            message: sender.tag == correctAnswer ? "Your score is \(score)" : "Your score is \(score), you picked \(countries[sender.tag]) instead of \(countries[correctAnswer])",
+            preferredStyle: .alert
+        )
         ac.addAction(UIAlertAction(title: "Continue", style: .default, handler: askQuestion))
 
         present(ac, animated: true)
