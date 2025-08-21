@@ -55,7 +55,7 @@ class ViewController: UIViewController {
         button3.setImage(UIImage(named: countries[2]), for: .normal)
 
         // Challenge 1: Showing score
-        title =  "Which of these is " + countries[correctAnswer].uppercased() + "? Current Score: \(score)"
+        title = "Which of these is " + countries[correctAnswer].uppercased() + "? Current Score: \(score)"
 
         // Challenge 2: Final Alert
         if questionsAsked >= 10 {
